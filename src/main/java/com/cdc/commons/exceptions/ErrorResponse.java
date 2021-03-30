@@ -1,16 +1,16 @@
 package com.cdc.commons.exceptions;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
 
     private String message;
@@ -18,6 +18,10 @@ public class ErrorResponse {
     private int code;
 
     private String status;
+
+    private String path;
+
+    private Long timestamp;
 
     private List<ObjectError> errors;
 

@@ -1,34 +1,51 @@
 package com.cdc.commons.exceptions;
 
-import org.springframework.http.HttpHeaders;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
-public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+public class EntityExceptionHandler {
 
-    @Override
-    protected final ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                        HttpHeaders headers, HttpStatus status,
-                                                                        WebRequest request) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
         List<ObjectError> errors = this.getErrors(ex);
-        ErrorResponse errorResponse = this.getErrorResponse(status, errors);
+        ErrorResponse errorResponse = this.getErrorResponse(
+                "The request contains invalid fields", HttpStatus.BAD_REQUEST,
+                request, errors);
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
-    private ErrorResponse getErrorResponse(HttpStatus status, List<ObjectError> errors) {
-        return new ErrorResponse("The request contains invalid fields", status.value(),
-                status.getReasonPhrase(), errors);
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = this.getErrorResponse(
+                ex.getMessage(), HttpStatus.CONFLICT,
+                request, null);
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Object> handleNullPointerException(NullPointerException ex) {
+        return new ResponseEntity<>(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private ErrorResponse getErrorResponse(String message, HttpStatus status, HttpServletRequest request, List<ObjectError> errors) {
+        return ErrorResponse.builder()
+                .message(message)
+                .status(status.getReasonPhrase())
+                .code(status.value())
+                .errors(errors)
+                .timestamp(System.currentTimeMillis())
+                .path(request.getRequestURI())
+                .build();
     }
 
     private List<ObjectError> getErrors(MethodArgumentNotValidException ex) {

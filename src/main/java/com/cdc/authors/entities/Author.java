@@ -36,7 +36,7 @@ public class Author implements Serializable {
     @NotBlank
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @NotBlank
     @Email
     private String email;
