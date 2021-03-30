@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class EntityExceptionHandler {
                 .status(status.getReasonPhrase())
                 .code(status.value())
                 .errors(errors)
-                .timestamp(System.currentTimeMillis())
+                .timestamp(Instant.now().toString())
                 .path(request.getRequestURI())
                 .build();
     }

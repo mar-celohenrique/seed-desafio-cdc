@@ -1,7 +1,7 @@
-package com.cdc.authors.controllers;
+package com.cdc.categories.controllers;
 
-import com.cdc.authors.controllers.requests.AuthorRequest;
-import com.cdc.authors.entities.Author;
+import com.cdc.categories.controllers.requests.CategoryRequest;
+import com.cdc.categories.entities.Category;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,17 +13,17 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
-public class AuthorController {
+public class CategoryController {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @PostMapping("/authors")
+    @PostMapping("/categories")
     @Transactional
-    public ResponseEntity<Author> create(@Valid @RequestBody AuthorRequest authorRequest) {
-        Author author = authorRequest.toModel();
-        this.entityManager.persist(author);
-        return ResponseEntity.ok(author);
+    public ResponseEntity<Category> create(@Valid @RequestBody CategoryRequest categoryRequest) {
+        Category category = categoryRequest.toModel();
+        this.entityManager.persist(category);
+        return ResponseEntity.ok(category);
     }
 
 }

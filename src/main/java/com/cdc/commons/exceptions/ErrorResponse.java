@@ -21,7 +21,7 @@ public class ErrorResponse {
 
     private String path;
 
-    private Long timestamp;
+    private String timestamp;
 
     private List<ObjectError> errors;
 
