@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
@@ -34,8 +33,11 @@ public class EntityExceptionHandler {
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<Object> handleNullPointerException(NullPointerException ex) {
-        return new ResponseEntity<>(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Object> handleNullPointerException(NullPointerException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = this.getErrorResponse(
+                ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,
+                request, null);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
     private ErrorResponse getErrorResponse(String message, HttpStatus status, HttpServletRequest request, List<ObjectError> errors) {

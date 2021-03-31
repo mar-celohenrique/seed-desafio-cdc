@@ -18,7 +18,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Category implements Serializable {
 
-    private static final long serialVersionUID = -5385657076704160688L;
+    private static final long serialVersionUID = -3501538365313833076L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

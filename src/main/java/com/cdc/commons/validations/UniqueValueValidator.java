@@ -15,14 +15,14 @@ public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Ob
     private EntityManager manager;
 
     @Override
-    public void initialize(UniqueValue params) {
-        this.columnName = params.columnName();
-        this.clazz = params.domainClass();
+    public void initialize(UniqueValue constraintAnnotation) {
+        this.columnName = constraintAnnotation.columnName();
+        this.clazz = constraintAnnotation.domainClass();
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        return this.manager.createQuery("select 1 from " + clazz.getName() + " where " + columnName + " = :value")
+        return this.manager.createQuery("select 1 from " + this.clazz.getName() + " where " + this.columnName + " = :value")
                 .setParameter("value", value)
                 .getResultList()
                 .isEmpty();
