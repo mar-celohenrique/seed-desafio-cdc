@@ -40,6 +40,12 @@ public class EntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException e, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                this.getErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND, request, null));
+    }
+
     private ErrorResponse getErrorResponse(String message, HttpStatus status, HttpServletRequest request, List<ObjectError> errors) {
         return ErrorResponse.builder()
                 .message(message)

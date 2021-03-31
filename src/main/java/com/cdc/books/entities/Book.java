@@ -53,7 +53,7 @@ public class Book implements Serializable {
     @Column(name = "pages", nullable = false)
     @NotNull
     @Min(value = 100)
-    private Integer pages;
+    private int pages;
 
     @Column(name = "isbn", nullable = false, unique = true)
     @NotBlank
@@ -81,7 +81,8 @@ public class Book implements Serializable {
                 @NotBlank @Length(max = 500) String synopsis,
                 String summary,
                 @NotNull @Min(value = 20) BigDecimal price,
-                @NotNull @Min(value = 100) Integer pages, @NotBlank String isbn,
+                @NotNull @Min(value = 100) int pages,
+                @NotBlank String isbn,
                 @Future @NotNull LocalDate publicationDate,
                 @Valid @NotNull Category category,
                 @Valid @NotNull Author author) {

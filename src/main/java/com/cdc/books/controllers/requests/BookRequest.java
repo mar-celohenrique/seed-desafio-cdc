@@ -34,7 +34,7 @@ public class BookRequest {
 
     @NotNull
     @Min(value = 100)
-    private Integer pages;
+    private int pages;
 
     @NotBlank
     private String isbn;
@@ -56,7 +56,7 @@ public class BookRequest {
                        @NotBlank @Length(max = 500) String synopsis,
                        String summary,
                        @NotNull @Min(value = 20) BigDecimal price,
-                       @NotNull @Min(value = 100) Integer pages,
+                       @NotNull @Min(value = 100) int pages,
                        @NotBlank String isbn,
                        @Future @NotNull LocalDate publicationDate,
                        @NotNull Long categoryId,
