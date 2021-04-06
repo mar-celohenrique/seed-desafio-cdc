@@ -41,7 +41,7 @@ public class EntityExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException e, HttpServletRequest request) {
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 this.getErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND, request, null));
     }

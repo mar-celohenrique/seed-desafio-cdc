@@ -10,7 +10,6 @@ public class AuthorDetailResponse {
 
     private final String description;
 
-
     public AuthorDetailResponse(Author author) {
         this.name = author.getName();
         this.description = author.getDescription();
