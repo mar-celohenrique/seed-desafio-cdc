@@ -27,7 +27,7 @@ public class ExistsIdValueValidator implements ConstraintValidator<ExistsId, Obj
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         if (value == null) {
-            return false;
+            return true;
         }
 
         Query query = this.manager.createQuery("select 1 from " + this.clazz.getName() + " where " + this.columnName + " = :value");

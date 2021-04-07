@@ -1,5 +1,6 @@
 package com.cdc.countries.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"name"})
 public class Country {
 
     @Id
