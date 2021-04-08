@@ -3,7 +3,7 @@ package com.cdc.books.controllers.requests;
 import com.cdc.authors.entities.Author;
 import com.cdc.books.entities.Book;
 import com.cdc.categories.entities.Category;
-import com.cdc.commons.validations.ExistsId;
+import com.cdc.commons.validations.ExistsValue;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -45,11 +45,11 @@ public class BookRequest {
     private LocalDate publicationDate;
 
     @NotNull
-    @ExistsId(columnName = "id", domainClass = Category.class)
+    @ExistsValue(fieldName = "id", domainClass = Category.class)
     private Long categoryId;
 
     @NotNull
-    @ExistsId(columnName = "id", domainClass = Author.class)
+    @ExistsValue(fieldName = "id", domainClass = Author.class)
     private Long authorId;
 
     public BookRequest(@NotBlank String title,

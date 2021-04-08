@@ -1,5 +1,6 @@
 package com.cdc.commons.exceptions;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class EntityExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -21,29 +23,38 @@ public class EntityExceptionHandler {
         ErrorResponse errorResponse = this.getErrorResponse(
                 "The request contains invalid fields", HttpStatus.BAD_REQUEST,
                 request, errors);
+        this.logException(ex);
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex, HttpServletRequest request) {
-        ErrorResponse errorResponse = this.getErrorResponse(
+        this.logException(ex);
+        return ResponseEntity.badRequest().body(this.getErrorResponse(
                 ex.getMessage(), HttpStatus.CONFLICT,
-                request, null);
-        return ResponseEntity.badRequest().body(errorResponse);
+                request, null));
     }
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Object> handleNullPointerException(NullPointerException ex, HttpServletRequest request) {
-        ErrorResponse errorResponse = this.getErrorResponse(
+        this.logException(ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(this.getErrorResponse(
                 ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,
-                request, null);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+                request, null));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, HttpServletRequest request) {
+        this.logException(ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                this.getErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND, request, null));
+                this.getErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request, null));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
+        this.logException(ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                this.getErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, request, null));
     }
 
     private ErrorResponse getErrorResponse(String message, HttpStatus status, HttpServletRequest request, List<ObjectError> errors) {
@@ -62,4 +73,9 @@ public class EntityExceptionHandler {
                 .map(error -> new ObjectError(error.getDefaultMessage(), error.getField(), error.getRejectedValue()))
                 .collect(Collectors.toList());
     }
+
+    private void logException(Exception ex) {
+        log.error("Error", ex);
+    }
+
 }

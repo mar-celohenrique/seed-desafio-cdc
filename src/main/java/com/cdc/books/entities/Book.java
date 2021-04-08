@@ -3,6 +3,7 @@ package com.cdc.books.entities;
 import com.cdc.authors.entities.Author;
 import com.cdc.categories.entities.Category;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -25,6 +26,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"isbn"})
 public class Book implements Serializable {
 
     private static final long serialVersionUID = -1775286647702244226L;

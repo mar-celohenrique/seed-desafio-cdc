@@ -7,10 +7,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = ExistsIdValueValidator.class)
+@Constraint(validatedBy = ExistsValueValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExistsId {
+public @interface ExistsValue {
 
     String message() default "The entity must exists on DB";
 
@@ -18,8 +18,10 @@ public @interface ExistsId {
 
     Class<? extends Payload>[] payload() default { };
 
-    String columnName();
+    String fieldName();
 
     Class<?> domainClass();
+
+    boolean checkCount() default true;
 
 }

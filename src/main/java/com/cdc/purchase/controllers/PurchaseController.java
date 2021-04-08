@@ -1,8 +1,10 @@
-package com.cdc.po.controllers;
+package com.cdc.purchase.controllers;
 
+import com.cdc.commons.validations.CouponValidator;
 import com.cdc.commons.validations.StateBelongsCountryValidator;
-import com.cdc.po.controllers.requests.PurchaseOrderRequest;
-import com.cdc.po.entities.PurchaseOrder;
+import com.cdc.coupons.repositories.CouponRepository;
+import com.cdc.purchase.controllers.requests.PurchaseRequest;
+import com.cdc.purchase.entities.Purchase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -18,23 +20,28 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-public class PurchaseOrderController {
+public class PurchaseController {
 
     private final StateBelongsCountryValidator stateBelongsCountryValidator;
+
+    private final CouponValidator couponValidator;
+
+    private final CouponRepository couponRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @InitBinder
     public void init(WebDataBinder binder) {
-        binder.addValidators(this.stateBelongsCountryValidator);
+        binder.addValidators(this.stateBelongsCountryValidator, this.couponValidator);
     }
 
     @PostMapping("/po")
     @Transactional
-    public ResponseEntity<PurchaseOrder> create(@RequestBody @Valid PurchaseOrderRequest purchaseOrderRequest) {
-        PurchaseOrder purchaseOrder = purchaseOrderRequest.toModel(this.entityManager);
-        return ResponseEntity.ok(purchaseOrder);
+    public ResponseEntity<Purchase> create(@RequestBody @Valid PurchaseRequest purchaseRequest) {
+        Purchase purchase = purchaseRequest.toModel(this.entityManager, this.couponRepository);
+        this.entityManager.persist(purchase);
+        return ResponseEntity.ok(purchase);
     }
 
 }

@@ -9,19 +9,22 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
-public class ExistsIdValueValidator implements ConstraintValidator<ExistsId, Object> {
+public class ExistsValueValidator implements ConstraintValidator<ExistsValue, Object> {
 
-    private String columnName;
+    private String fieldName;
 
     private Class<?> clazz;
+
+    private boolean checkCount;
 
     @PersistenceContext
     private EntityManager manager;
 
     @Override
-    public void initialize(ExistsId constraintAnnotation) {
-        this.columnName = constraintAnnotation.columnName();
+    public void initialize(ExistsValue constraintAnnotation) {
+        this.fieldName = constraintAnnotation.fieldName();
         this.clazz = constraintAnnotation.domainClass();
+        this.checkCount = constraintAnnotation.checkCount();
     }
 
     @Override
@@ -30,11 +33,14 @@ public class ExistsIdValueValidator implements ConstraintValidator<ExistsId, Obj
             return true;
         }
 
-        Query query = this.manager.createQuery("select 1 from " + this.clazz.getName() + " where " + this.columnName + " = :value");
+        Query query = this.manager.createQuery("select 1 from " + this.clazz.getName() + " where " + this.fieldName + " = :value");
         query.setParameter("value", value);
 
         List<?> list = query.getResultList();
-        Assert.isTrue(list.size() <= 1, "The DB has more than one " + this.clazz + " that has " + this.columnName + " with the same value = " + value);
+
+        if (this.checkCount) {
+            Assert.isTrue(list.size() <= 1, "The DB has more than one " + this.clazz + " that has " + this.fieldName + " with the same value = " + value);
+        }
 
         return !list.isEmpty();
     }

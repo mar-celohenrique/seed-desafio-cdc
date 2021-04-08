@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: desafio-cdc
+  datasource:
+    hikari:
+      driver-class-name: org.postgresql.Driver
+      minimum-idle: 20
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      pool-name: SpringBootJPAHikariCP
+      max-lifetime: 2000000
+      connection-timeout: 30000
+    url: jdbc:postgresql://localhost:5432/postgres
+    type: com.zaxxer.hikari.HikariDataSource
+    username: root
+    password:  root_12345
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql

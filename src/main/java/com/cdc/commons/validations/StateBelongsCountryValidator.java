@@ -1,7 +1,7 @@
 package com.cdc.commons.validations;
 
 import com.cdc.countries.entities.Country;
-import com.cdc.po.controllers.requests.PurchaseOrderRequest;
+import com.cdc.purchase.controllers.requests.PurchaseRequest;
 import com.cdc.states.entities.State;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -18,7 +18,7 @@ public class StateBelongsCountryValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return PurchaseOrderRequest.class.isAssignableFrom(clazz);
+        return PurchaseRequest.class.isAssignableFrom(clazz);
     }
 
     @Override
@@ -27,11 +27,11 @@ public class StateBelongsCountryValidator implements Validator {
             return;
         }
 
-        PurchaseOrderRequest purchaseOrderRequest = (PurchaseOrderRequest) target;
+        PurchaseRequest purchaseRequest = (PurchaseRequest) target;
 
-        if (purchaseOrderRequest.hasState()) {
-            Country country = this.entityManager.find(Country.class, purchaseOrderRequest.getCountryId());
-            State state = this.entityManager.find(State.class, purchaseOrderRequest.getStateId());
+        if (purchaseRequest.hasState()) {
+            Country country = this.entityManager.find(Country.class, purchaseRequest.getCountryId());
+            State state = this.entityManager.find(State.class, purchaseRequest.getStateId());
             if (!state.belongsToCountry(country)) {
                 errors.reject("countryId", null, "The state does not belong to the country");
             }

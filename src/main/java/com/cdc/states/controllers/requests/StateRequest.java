@@ -1,6 +1,6 @@
 package com.cdc.states.controllers.requests;
 
-import com.cdc.commons.validations.ExistsId;
+import com.cdc.commons.validations.ExistsValue;
 import com.cdc.commons.validations.UniqueValue;
 import com.cdc.countries.entities.Country;
 import com.cdc.states.entities.State;
@@ -17,7 +17,7 @@ public class StateRequest {
     @UniqueValue(columnName = "name", domainClass = State.class)
     private final String name;
 
-    @ExistsId(columnName = "id", domainClass = Country.class)
+    @ExistsValue(fieldName = "id", domainClass = Country.class)
     @NotNull
     private final Long countryId;
 
