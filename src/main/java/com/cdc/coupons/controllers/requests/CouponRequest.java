@@ -8,6 +8,7 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class CouponRequest {
@@ -18,7 +19,7 @@ public class CouponRequest {
 
     @NotNull
     @Positive
-    private final Double discount;
+    private final BigDecimal discount;
 
     @NotNull
     @Future
@@ -26,7 +27,7 @@ public class CouponRequest {
     private final LocalDate expirationDate;
 
     public CouponRequest(@NotBlank String code,
-                         @NotNull @Positive Double discount,
+                         @NotNull @Positive BigDecimal discount,
                          @NotNull @Future LocalDate expirationDate) {
         this.code = code;
         this.discount = discount;

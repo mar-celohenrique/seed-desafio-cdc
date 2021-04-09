@@ -3,6 +3,7 @@ package com.cdc.books.controllers;
 import com.cdc.books.controllers.responses.BookDetailResponse;
 import com.cdc.books.entities.Book;
 import com.cdc.commons.exceptions.EntityNotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,11 +19,11 @@ public class BookDetailController {
     private EntityManager entityManager;
 
     @GetMapping("/books/{id}")
-    private BookDetailResponse book(@PathVariable("id") Long id) {
+    private ResponseEntity<BookDetailResponse> book(@PathVariable("id") Long id) {
         Book book = Optional.ofNullable(this.entityManager.find(Book.class, id))
                 .orElseThrow(() -> new EntityNotFoundException("Book [" + id + "] not found!"));
 
-        return new BookDetailResponse(book);
+        return ResponseEntity.ok(new BookDetailResponse(book));
     }
 
 }

@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,11 +32,14 @@ public class Order {
     @NotNull
     @Valid
     @JsonBackReference
-    private final Purchase purchase;
+    private Purchase purchase;
 
     @ElementCollection
     @Size(min = 1)
     private final Set<PurchaseDetailItem> items = new HashSet<>();
+
+    @Deprecated
+    public Order() { }
 
     public Order(@NotNull @Valid Purchase purchase,
                  @Size(min = 1) Set<PurchaseDetailItem> items) {
@@ -45,11 +49,14 @@ public class Order {
     }
 
     public boolean totalEqualsTo(BigDecimal total) {
-        BigDecimal totalOrder = this.items.stream()
+        return total.setScale(2, RoundingMode.UNNECESSARY)
+                .equals(this.getTotal().setScale(2, RoundingMode.UNNECESSARY));
+    }
+
+    public BigDecimal getTotal() {
+        return this.items.stream()
                 .map(PurchaseDetailItem::total)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return totalOrder.doubleValue() == total.doubleValue();
     }
 
 }

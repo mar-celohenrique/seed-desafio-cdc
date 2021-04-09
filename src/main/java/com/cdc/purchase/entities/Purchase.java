@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.text.MessageFormat;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Entity
@@ -119,7 +121,22 @@ public class Purchase {
         Assert.notNull(coupon, "The coupon must not be null");
         Assert.isTrue(coupon.isValid(), "The coupon is not valid");
         Assert.isNull(this.appliedCoupon, "Is not possible to change a coupon from a PO");
+        Assert.isNull(this.id, "Is not possible to apply a coupon on a PO that was already created");
         this.appliedCoupon = new AppliedCoupon(coupon);
+    }
+
+    public boolean hasCoupon() {
+        return Optional.ofNullable(this.appliedCoupon).isPresent();
+    }
+
+    public String getAddressFormatted() {
+        boolean hasState = Optional.ofNullable(this.state).isPresent();
+
+        Object[] params = new Object[]{this.address, this.complement, this.city,
+                this.zipCode, hasState ? this.state.getName() : this.country.getName(),
+                !hasState ? "#" : this.country.getName(), this.phone};
+
+        return MessageFormat.format("{0} {1}, {2} - {3}, {4}, {5}. {6}", params).trim();
     }
 
 }
