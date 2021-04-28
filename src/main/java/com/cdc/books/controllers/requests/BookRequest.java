@@ -7,6 +7,7 @@ import com.cdc.commons.validations.ExistsValue;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.Future;
@@ -76,6 +77,9 @@ public class BookRequest {
         @NotNull Category category = entityManager.find(Category.class, this.categoryId);
         @NotNull Author author = entityManager.find(Author.class, this.authorId);
 
+        Assert.state(category != null, "The category must exists to create a book.");
+        Assert.state(author != null, "The author must exists to create a book.");
+
         return new Book(this.title,
                 this.synopsis,
                 this.summary,
@@ -86,4 +90,5 @@ public class BookRequest {
                 category,
                 author);
     }
+
 }
