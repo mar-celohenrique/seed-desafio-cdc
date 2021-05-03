@@ -1,6 +1,7 @@
 package com.cdc.coupons.entities;
 
 import lombok.Getter;
+import org.springframework.util.Assert;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,6 +44,7 @@ public class Coupon {
     public Coupon(@NotBlank String code,
                   @NotNull @Positive BigDecimal discount,
                   @NotNull @Future LocalDate expirationDate) {
+        Assert.isTrue(expirationDate.compareTo(LocalDate.now()) >= 0, "The expiration date must be on the future");
         this.code = code;
         this.discount = discount;
         this.expirationDate = expirationDate;
