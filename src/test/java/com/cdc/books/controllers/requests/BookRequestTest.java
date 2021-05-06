@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 class BookRequestTest {
 
     private final BookRequest request = new BookRequest("tite",
-            "synopsis", "summary", BigDecimal.valueOf(10L),
+            "synopsis", "summary", BigDecimal.TEN,
             10, "ABC",
             LocalDate.now(), 1L, 1L);
 
@@ -26,11 +26,6 @@ class BookRequestTest {
     void toModel1() {
         // given
         EntityManager entityManager = Mockito.mock(EntityManager.class);
-
-        BookRequest request = new BookRequest("tite",
-                "synopsis", "summary", BigDecimal.valueOf(10L),
-                10, "ABC",
-                LocalDate.now(), 1L, 1L);
 
         // when
         when(entityManager.find(Category.class, 1L)).thenReturn(null);

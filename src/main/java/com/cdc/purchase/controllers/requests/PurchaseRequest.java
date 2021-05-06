@@ -113,7 +113,7 @@ public class PurchaseRequest {
                 this.zipCode,
                 createOrderFunction);
 
-        if (this.stateId != null) {
+        if (this.hasState()) {
             purchase.setState(entityManager.find(State.class, this.stateId));
         }
 
@@ -130,7 +130,7 @@ public class PurchaseRequest {
     }
 
     public boolean hasState() {
-        return this.stateId != null;
+        return Optional.ofNullable(this.stateId).isPresent();
     }
 
 }
