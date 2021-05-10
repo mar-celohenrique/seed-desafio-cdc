@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -34,7 +34,7 @@ public class Coupon {
 
     @Column(name = "expiration_date", nullable = false)
     @NotNull
-    @Future
+    @FutureOrPresent
     private LocalDate expirationDate;
 
     @Deprecated
@@ -43,7 +43,7 @@ public class Coupon {
 
     public Coupon(@NotBlank String code,
                   @NotNull @Positive BigDecimal discount,
-                  @NotNull @Future LocalDate expirationDate) {
+                  @NotNull @FutureOrPresent LocalDate expirationDate) {
         Assert.isTrue(expirationDate.compareTo(LocalDate.now()) >= 0, "The expiration date must be on the future");
         this.code = code;
         this.discount = discount;

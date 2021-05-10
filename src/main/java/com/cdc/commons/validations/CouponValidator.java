@@ -5,9 +5,11 @@ import com.cdc.coupons.repositories.CouponRepository;
 import com.cdc.purchase.controllers.requests.PurchaseRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -32,7 +34,8 @@ public class CouponValidator implements Validator {
 
         if (couponCode.isPresent()) {
             Coupon coupon = this.couponRepository.getByCode(couponCode.get());
-            if (coupon == null || !coupon.isValid()) {
+            Assert.state(Objects.nonNull(coupon), "The coupon must exists to be validated");
+            if (!coupon.isValid()) {
                 errors.rejectValue("couponCode", null, "This coupon is not valid");
             }
         }

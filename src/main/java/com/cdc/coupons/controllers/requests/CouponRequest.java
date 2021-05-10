@@ -4,7 +4,7 @@ import com.cdc.commons.validations.UniqueValue;
 import com.cdc.coupons.entities.Coupon;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -22,13 +22,13 @@ public class CouponRequest {
     private final BigDecimal discount;
 
     @NotNull
-    @Future
+    @FutureOrPresent
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private final LocalDate expirationDate;
 
     public CouponRequest(@NotBlank String code,
                          @NotNull @Positive BigDecimal discount,
-                         @NotNull @Future LocalDate expirationDate) {
+                         @NotNull @FutureOrPresent LocalDate expirationDate) {
         this.code = code;
         this.discount = discount;
         this.expirationDate = expirationDate;
