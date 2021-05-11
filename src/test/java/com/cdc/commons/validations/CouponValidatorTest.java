@@ -52,7 +52,7 @@ class CouponValidatorTest {
 
         this.request.setCouponCode("code");
 
-        Errors errors = new BeanPropertyBindingResult(request, "target");
+        Errors errors = new BeanPropertyBindingResult(this.request, "target");
         CouponValidator validator = new CouponValidator(this.couponRepository);
 
         // when
@@ -73,7 +73,7 @@ class CouponValidatorTest {
 
         this.request.setCouponCode("code");
 
-        Errors errors = new BeanPropertyBindingResult(request, "target");
+        Errors errors = new BeanPropertyBindingResult(this.request, "target");
         CouponValidator validator = new CouponValidator(this.couponRepository);
 
         // when
@@ -90,7 +90,7 @@ class CouponValidatorTest {
     void validate3() {
         // given
         this.request.setCouponCode("code");
-        Errors errors = new BeanPropertyBindingResult(request, "target");
+        Errors errors = new BeanPropertyBindingResult(this.request, "target");
         CouponValidator validator = new CouponValidator(this.couponRepository);
 
         // when
@@ -104,7 +104,7 @@ class CouponValidatorTest {
     @DisplayName("should not call the repository when the coupon code is not present")
     void validate4() {
         // given
-        Errors errors = new BeanPropertyBindingResult(request, "target");
+        Errors errors = new BeanPropertyBindingResult(this.request, "target");
         CouponValidator validator = new CouponValidator(this.couponRepository);
 
         // then
@@ -118,7 +118,7 @@ class CouponValidatorTest {
     @DisplayName("should stop if already has errors")
     void validate5() {
         // given
-        Errors errors = new BeanPropertyBindingResult(request, "target");
+        Errors errors = new BeanPropertyBindingResult(this.request, "target");
         errors.reject("couponCode");
 
         CouponValidator validator = new CouponValidator(this.couponRepository);
