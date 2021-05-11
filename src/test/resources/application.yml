@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: desafio-cdc
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      minimum-idle: 20
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      pool-name: SpringBootJPAHikariCP
+      max-lifetime: 2000000
+      connection-timeout: 30000
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=false;mode=PostgreSQL
+    type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: h2
