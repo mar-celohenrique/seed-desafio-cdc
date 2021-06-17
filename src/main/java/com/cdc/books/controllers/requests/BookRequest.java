@@ -4,6 +4,7 @@ import com.cdc.authors.entities.Author;
 import com.cdc.books.entities.Book;
 import com.cdc.categories.entities.Category;
 import com.cdc.commons.validations.ExistsValue;
+import com.cdc.commons.validations.UniqueValue;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 public class BookRequest {
 
     @NotBlank
+    @UniqueValue(columnName = "title", domainClass = Book.class)
     private String title;
 
     @NotBlank
@@ -38,6 +40,7 @@ public class BookRequest {
     private int pages;
 
     @NotBlank
+    @UniqueValue(columnName = "isbn", domainClass = Book.class)
     private String isbn;
 
     @Future
