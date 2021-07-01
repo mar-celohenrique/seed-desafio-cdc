@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Getter
 public class AppliedCoupon {
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Coupon coupon;
 
     @Positive
