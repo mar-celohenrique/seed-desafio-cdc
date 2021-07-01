@@ -21,7 +21,7 @@ class CountryControllerTest extends BaseRestControllerTest {
     private final Set<String> names = new HashSet<>();
 
     @Property(tries = 10)
-    @Label("should create an author")
+    @Label("should create a country")
     void create(@ForAll @AlphaChars @StringLength(min = 1, max = 255) String name) throws Exception {
         assumeTrue(this.names.add(name));
 
